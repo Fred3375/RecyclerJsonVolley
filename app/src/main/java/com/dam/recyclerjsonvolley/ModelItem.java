@@ -16,4 +16,13 @@ public class ModelItem {
     public int getLikes() {
         return likes;
     }
+
+    public ModelItem(String imageUrl, String creator, int likes) {
+        this.imageUrl = imageUrl;
+        this.creator = creator;
+        this.likes = likes;
+    }
+
+    public ModelItem() {
+    }
 }

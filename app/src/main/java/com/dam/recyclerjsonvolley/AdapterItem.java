@@ -29,6 +29,18 @@ public class AdapterItem extends RecyclerView.Adapter <AdapterItem.ViewHolder> {
             ivImage = itemView.findViewById(R.id.ivImage);
             tvCreator = itemView.findViewById(R.id.tvCreator);
             tvLikes = itemView.findViewById(R.id.tvLikes);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // getAdapterPosition from RecyclerView.ViewHolder
+                    if (onItemClickListener != null){
+                        int pos = getBindingAdapterPosition();
+                        if(pos != RecyclerView.NO_POSITION){
+                            onItemClickListener.onItemClick(pos);
+                        }
+                    }
+                }
+            });
         }
     }
 
@@ -62,14 +74,14 @@ public class AdapterItem extends RecyclerView.Adapter <AdapterItem.ViewHolder> {
         holder.tvLikes.setText("likes : " + likes);
 
         // Glide
-        RequestOptions options = new RequestOptions()
+        RequestOptions errorManagement = new RequestOptions()
                 .centerCrop() // center / crop pour les images de remplacement
                 .error(R.drawable.ic_baseline_warning_amber_24) // cas erreur
                 .placeholder(R.drawable.ic_baseline_wallpaper_24); // cas pas d'image
         Context context = holder.ivImage.getContext();
         Glide.with(context)
                 .load(imageUrl)
-                //  .apply(options)
+                //  .apply(errorManagement)
                 .fitCenter()
 //                .override(150, 150)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -100,5 +112,15 @@ public class AdapterItem extends RecyclerView.Adapter <AdapterItem.ViewHolder> {
         return itemArrayList.size();
     }
 
+    public interface OnItemClickListener {
+        void onItemClick(int pos);
+    }
+
+    // an interface object
+    public OnItemClickListener onItemClickListener;
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener){
+        this.onItemClickListener = onItemClickListener;
+    }
 
 }
